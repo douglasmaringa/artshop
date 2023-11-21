@@ -1,4 +1,4 @@
-import {getUserByEmail, createUser} from "@/sanity/sanity-utils";
+import {getUserByEmail, createUser,getProducts} from "@/sanity/sanity-utils";
 import Card from "./components/Card";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
@@ -20,6 +20,8 @@ export default async function Home() {
       user:user
     });
   }
+
+  const products = await getProducts();
   
   return (
     <div>
@@ -32,10 +34,11 @@ export default async function Home() {
 
       <div className='flex p-10'>
       <div className='mx-auto grid grid-cols-1 lg:grid-cols-3 gap-16'>
-         <Card/>
-         <Card/>
-         <Card/>
-         <Card/>
+        {
+          products.map((product)=>(
+            <Card key={product._id} product={product}/>
+          ))
+        }
       </div>
       </div>
 
