@@ -1,29 +1,14 @@
-"use client"
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import { FaTrash } from 'react-icons/fa';
+
 import { useUser } from '@clerk/nextjs';
 import { getOrdersByEmail } from '@/sanity/sanity-utils';
+import { currentUser } from '@clerk/nextjs';
 
-function Order() {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const [orders, setOrders] = useState([]);
+export default async function Order() {
+  const user = await currentUser();
+ 
+  if (!user) return <div>Not logged in</div>;
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (isSignedIn) {
-        try {
-          // Fetch orders for the current user's email
-          const fetchedOrders = await getOrdersByEmail(user?.emailAddresses[0]?.emailAddress);
-          setOrders(fetchedOrders);
-        } catch (error) {
-          console.error('Error fetching orders:', error.message);
-        }
-      }
-    };
-
-    fetchOrders();
-  }, [isSignedIn, user]);
+  const fetchedOrders = await getOrdersByEmail(user?.emailAddresses[0]?.emailAddress);
 
   return (
     <div className='max-w-3xl mx-auto mt-20'>
@@ -40,7 +25,7 @@ function Order() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {fetchedOrders.map((order) => (
             <tr key={order._id} className="hover:bg-gray-50 text-center border-b border-gray-300 text-[#5B20B6]">
               <td className="py-2 px-4 flex items-center">
                 {order.name}
@@ -74,4 +59,4 @@ function Order() {
   );
 }
 
-export default Order;
+

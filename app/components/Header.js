@@ -1,6 +1,7 @@
 "use client"
 import Image from "next/image"
 import { FaShoppingCart } from "react-icons/fa";
+import { MdLocalShipping } from "react-icons/md";
 import { UserButton } from "@clerk/nextjs";
 import useCartStore from "../cartStore";
 import Link from 'next/link';
@@ -29,6 +30,11 @@ function Header() {
                       </div>
                   )
              }
+
+             <Link className="ml-4" href="/order">
+              <MdLocalShipping className="text-3xl text-[#5B20B6] cursor-pointer hover:scale-125 transition-transform duration-300" />
+              </Link>
+
             <div className="ml-4">
             <UserButton  afterSignOutUrl="/"/>
             </div>
